@@ -1,5 +1,10 @@
-FXHASH webpack boilerplate + p5
-===============================
+WTBS Collaborative Logo Template
+================================
 
-Based on [fxhash-webpack-boilerplate](https://github.com/fxhash/fxhash-webpack-boilerplate)
+```
+npm i
+```
 
+```
+npm start
+```

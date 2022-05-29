@@ -10,6 +10,7 @@
     "start": "webpack serve --config ./config/webpack.config.dev.js"
   },
   "dependencies": {
+    "@thi.ng/random-fxhash": "^0.2.0",
     "lodash.debounce": "^4.0.8",
     "p5": "^1.4.0"
   },
