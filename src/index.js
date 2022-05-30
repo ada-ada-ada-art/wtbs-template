@@ -3,22 +3,14 @@
 import p5 from 'p5';
 import debounce from 'lodash.debounce';
 import {
-  RND,
   pick,
-  // probability,
-  // pickKey,
-  // weighted,
-  // weightedKey,
   seedFromHash,
 } from '@thi.ng/random-fxhash';
 
-import { styleClasses } from './letterstyle';
+import { LetterStyle, styleClasses } from './letterstyle';
 
 import './styles/sample1';
 import './styles/sample2';
-
-const seed = seedFromHash(fxhash);
-RND.seed(seed);
 
 const letterStyle = {};
 window.$fxhashFeatures = {};
@@ -38,6 +30,7 @@ console.table({
 
 new p5((p5) => {
   const letters = {};
+  const svgLetters = {};
   let fxpreviewDone = false;
   let s;
 
@@ -46,7 +39,16 @@ new p5((p5) => {
     if (s % 2 !== 0) { s -= 1; }
   }
 
+  p5.preload = () => {
+    for (let letter of WTBS) {
+      const lc = letter.toLowerCase();
+      svgLetters[letter] = p5.loadImage(`./images/${lc}.svg`);
+    }
+    LetterStyle.svgLetters = svgLetters;
+  };
+
   p5.setup = () => {
+    const seed = seedFromHash(fxhash);
     setupSize();
     p5.noLoop();
     p5.randomSeed(seed[0]);
