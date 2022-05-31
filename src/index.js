@@ -6,8 +6,8 @@ import debounce from 'lodash.debounce';
 
 import { LetterStyle, styleClasses } from './letterstyle';
 
-import './styles/sample1';
-import './styles/sample2';
+import './styles/sample-pixels';
+import './styles/sample-image';
 
 const pickedStyle = {};
 window.$fxhashFeatures = {};

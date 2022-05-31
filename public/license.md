@@ -7,7 +7,7 @@ This work is licensed under a Creative Commons
 Attribution-NonCommercial-NoDerivatives 4.0 International License
 http://creativecommons.org/licenses/by-nc-nd/4.0/
 
-## Bundled npm modules
+## Imported modules
 
 - P5 - GNU Lesser General Public License 2.1
   https://p5js.org/

@@ -9,10 +9,10 @@ import {
   probability,
 } from '@thi.ng/random-fxhash';
 
-addLetterStyle(class Sample2 extends LetterStyle {
+addLetterStyle(class SampleImage extends LetterStyle {
 
   static author = 'Laurent Houdard';
-  static name = 'Sample #2';
+  static name = 'SampleImage';
 
   setup() {
     this._inverted = probability(0.5);
