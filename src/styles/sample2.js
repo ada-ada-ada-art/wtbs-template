@@ -42,7 +42,7 @@ addLetterStyle(class Sample2 extends LetterStyle {
     this.pg.image(this._img, 0, 0, this.size, this.size);
     this.pg.loadPixels();
 
-    this.pg.strokeWeight(0.5);
+    this.pg.strokeWeight(this.size / 800);
     const ds = this.size * this.pg.pixelDensity();
     const len = this.size / this._gridSize;
     for (let {u, v, noise} of this._grid) {
