@@ -1,7 +1,7 @@
 {
-  "name": "fxhp5",
+  "name": "wtbs-template",
   "version": "1.0.0",
-  "description": "fxhash boilerplate + p5",
+  "description": "WTBS Collaborative Logo Template",
   "main": "index.js",
   "author": "Laurent Houdard - cables.and.pixels",
   "license": "MIT",

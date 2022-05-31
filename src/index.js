@@ -1,10 +1,7 @@
 /* global fxhash, fxpreview */
 
 import p5 from 'p5';
-import {
-  pick,
-  seedFromHash,
-} from '@thi.ng/random-fxhash';
+import { pick, seedFromHash } from '@thi.ng/random-fxhash';
 import debounce from 'lodash.debounce';
 
 import { LetterStyle, styleClasses } from './letterstyle';

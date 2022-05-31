@@ -22,13 +22,19 @@ export class LetterStyle {
     return LetterStyle.svgLetters[this.letter];
   }
 
-  *letterPixels() {
-    const pxl = LetterStyle.pixelData[this.letter];
+  letterPixels() {
+    const pixelData = LetterStyle.pixelData[this.letter];
+    const pixels = [];
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
-        yield {x: i, y: j, value: (pxl[j] >>> (8 - i)) & 1};
+        pixels.push({
+          x: i,
+          y: j,
+          value: (pixelData[j] >>> (8 - i)) & 1
+        });
       }
     }
+    return pixels;
   }
 
   static pixelData = {
