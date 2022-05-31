@@ -4,6 +4,9 @@
 
 import { addLetterStyle, LetterStyle } from '../letterstyle';
 
+// To make a new style, copy this template in a new file and import it
+// at the begining of ../index.js
+
 // random-fxhash helpers
 // (see https://www.npmjs.com/package/@thi.ng/random-fxhash)
 import {
@@ -20,6 +23,8 @@ addLetterStyle(class StyleName extends LetterStyle {
 
   setup() {
     // All randomness should be initialized here
+    // You can use either P5 this.pg.random(...), or random-fxhash
+    // helpers
 
     // Get letter image (see style-image)
     this._img = this.letterImage();
