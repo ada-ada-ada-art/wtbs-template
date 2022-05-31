@@ -1,25 +1,25 @@
 /* global fxhash, fxpreview */
 
 import p5 from 'p5';
-import debounce from 'lodash.debounce';
 import {
   pick,
   seedFromHash,
 } from '@thi.ng/random-fxhash';
+import debounce from 'lodash.debounce';
 
 import { LetterStyle, styleClasses } from './letterstyle';
 
 import './styles/sample1';
 import './styles/sample2';
 
-const letterStyle = {};
+const pickedStyle = {};
 window.$fxhashFeatures = {};
 
 const WTBS = ['W', 'T', 'B', 'S'];
 
 for (let letter of WTBS) {
   const s = pick(styleClasses);
-  letterStyle[letter] = s;
+  pickedStyle[letter] = s;
   window.$fxhashFeatures[letter] = `${s.name} by ${s.author}`;
 }
 
@@ -57,7 +57,7 @@ new p5((p5) => {
     p5.createCanvas(s, s);
     for (let letter of WTBS) {
       const pg = p5.createGraphics(s/2, s/2);
-      letters[letter] = new letterStyle[letter](pg, s/2, letter);
+      letters[letter] = new pickedStyle[letter](pg, s/2, letter);
       letters[letter].setup();
     }
   };
@@ -80,10 +80,10 @@ new p5((p5) => {
 
   p5.windowResized = debounce(() => {
     setupSize();
-    p5.resizeCanvas(s, s);
     for (let letter of WTBS) {
-      letters[letter].resize(s);
+      letters[letter].resize(s/2);
     }
+    p5.resizeCanvas(s, s);
   }, 50);
 
 }, window.document.body);
