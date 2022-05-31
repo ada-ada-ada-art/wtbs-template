@@ -20,7 +20,7 @@ addLetterStyle(class Sample2 extends LetterStyle {
     if (this._inverted) {
       this._img.filter(this.pg.INVERT);
     }
-    this._gridSize = pick([30, 40, 50]);
+    this._gridSize = pick([30, 40, 50, 60]);
     this._grid = [];
     const noiseOffset = {
       u: RND.minmax(0, 10),
@@ -39,24 +39,21 @@ addLetterStyle(class Sample2 extends LetterStyle {
     this.pg.strokeWeight(0);
     this.pg.fill(this._inverted ? 0 : 255);
     this.pg.rect(0, 0, this.size);
+    this.pg.image(this._img, 0, 0, this.size, this.size);
+    this.pg.loadPixels();
 
-    const ds = this.pg.pixelDensity() * this.size;
-    this._img.resize(ds, ds);
-    this._img.loadPixels();
     this.pg.strokeWeight(0.5);
-
-    this.pg.image(this._img, 0, 0);
-
+    const ds = this.size * this.pg.pixelDensity();
     const len = this.size / this._gridSize;
     for (let {u, v, noise} of this._grid) {
       const x = Math.round(u / this._gridSize * ds);
       const y = Math.round(v / this._gridSize * ds);
       const i = 4 * (x + y * ds);
-      let p = this._img.pixels[i + 3];
-      if (this._inverted) {
-        p = 255 - p;
-      }
-      const a = (noise - 0.5) * Math.PI;
+      const inside = (this._inverted && this.pg.pixels[i] > 127) ||
+                     (!this._inverted && this.pg.pixels[i] <= 127);
+      let p = 255 - this.pg.pixels[i];
+      let a = (noise - 0.5) * Math.PI;
+      if (inside) { a /= 3; }
       const x2 = x + 2 * len * Math.cos(a);
       const y2 = y + 2 * len * Math.sin(a);
       this.pg.stroke(p);
