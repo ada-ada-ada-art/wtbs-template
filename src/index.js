@@ -80,6 +80,7 @@ new p5((p5) => {
     for (let letter of WTBS) {
       letters[letter].resize(s/2);
     }
+    
     p5.resizeCanvas(s, s);
   }, 50);
 

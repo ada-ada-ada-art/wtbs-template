@@ -37,6 +37,10 @@ export class LetterStyle {
     return pixels;
   }
 
+  createGraphics(w, h, renderer = this.pg.P2D) {
+    return this.pg._pInst.createGraphics(w, h, renderer);
+  }
+
   static pixelData = {
     W: [
       0b000000000,
