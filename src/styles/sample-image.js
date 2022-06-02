@@ -4,7 +4,6 @@
 
 import { addLetterStyle, LetterStyle } from '../letterstyle';
 import {
-  RND,
   pick,
   probability,
 } from '@thi.ng/random-fxhash';
@@ -16,20 +15,11 @@ addLetterStyle(class SampleImage extends LetterStyle {
 
   setup() {
     this._inverted = probability(0.5);
-    this._img = this.letterImage();
-    if (this._inverted) {
-      this._img.filter(this.pg.INVERT);
-    }
     this._gridSize = pick([30, 40, 50, 60]);
     this._grid = [];
-    const noiseOffset = {
-      u: RND.minmax(0, 10),
-      v: RND.minmax(0, 10)
-    };
     for (let u = 0; u < this._gridSize; u += 1) {
       for (let v = 0; v < this._gridSize; v += 1) {
-        const noise = this.pg.noise(u / 10 + noiseOffset.u,
-                                    v / 10 + noiseOffset.v);
+        const noise = this.pg.noise(u / 10, v / 10);
         this._grid.push({u, v, noise});
       }
     }
@@ -39,7 +29,8 @@ addLetterStyle(class SampleImage extends LetterStyle {
     this.pg.strokeWeight(0);
     this.pg.fill(this._inverted ? 0 : 255);
     this.pg.rect(0, 0, this.size);
-    this.pg.image(this._img, 0, 0, this.size, this.size);
+    this.pg.fill(this._inverted ? 255 : 0);
+    this.drawLetter();
     this.pg.loadPixels();
 
     this.pg.strokeWeight(this.size / 800);

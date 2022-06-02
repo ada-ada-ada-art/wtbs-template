@@ -4,7 +4,7 @@ import p5 from 'p5';
 import { pick, seedFromHash } from '@thi.ng/random-fxhash';
 import debounce from 'lodash.debounce';
 
-import { LetterStyle, styleClasses } from './letterstyle';
+import { styleClasses } from './letterstyle';
 
 import './styles/sample-pixels';
 import './styles/sample-image';
@@ -20,14 +20,15 @@ for (let letter of WTBS) {
   window.$fxhashFeatures[letter] = `${s.name} by ${s.author}`;
 }
 
-console.table({
-  fxhash,
-  ...window.$fxhashFeatures,
-});
+console.info('Waiting To Be Signed Collaborative Logo');
+console.info(fxhash);
+for (let [k, v] of Object.entries(window.$fxhashFeatures)) {
+  console.info(`${k}: ${v}`);
+}
 
 new p5((p5) => {
   const letters = {};
-  const svgLetters = {};
+  const fonts = {};
   let fxpreviewDone = false;
   let s;
 
@@ -37,24 +38,30 @@ new p5((p5) => {
   }
 
   p5.preload = () => {
-    for (let letter of WTBS) {
-      const lc = letter.toLowerCase();
-      svgLetters[letter] = p5.loadImage(`./images/${lc}.svg`);
-    }
-    LetterStyle.svgLetters = svgLetters;
+    fonts.dejaVu = {
+      font: p5.loadFont('./fonts/DejaVuSansMono-Bold-subset.ttf'),
+      sizeFactor: 0.85,
+      posFactor: 0.42,
+    };
   };
 
   p5.setup = () => {
     const seed = seedFromHash(fxhash);
     setupSize();
     p5.noLoop();
-    p5.randomSeed(seed[0]);
-    p5.noiseSeed(seed[1]);
     p5.pixelDensity(1);
     p5.createCanvas(s, s);
-    for (let letter of WTBS) {
+    for (let i = 0; i < 4; i += 1) {
+      const letter = WTBS[i];
       const pg = p5.createGraphics(s/2, s/2);
-      letters[letter] = new pickedStyle[letter](pg, s/2, letter);
+      const xseed = [
+        seed[(i + 0) % 4],
+        seed[(i + 1) % 4],
+        seed[(i + 2) % 4],
+        seed[(i + 3) % 4]
+      ];
+      letters[letter] = new pickedStyle[letter](pg, s/2, letter, fonts, xseed);
+      letters[letter].reseed();
       letters[letter].setup();
     }
   };
@@ -64,10 +71,14 @@ new p5((p5) => {
     for (let letter of WTBS) {
       letters[letter].draw();
     }
-    p5.image(letters['W'].pg, 0, 0, s/2, s/2);
-    p5.image(letters['T'].pg, s/2, 0, s/2, s/2);
-    p5.image(letters['B'].pg, 0, s/2, s/2, s/2);
-    p5.image(letters['S'].pg, s/2, s/2, s/2, s/2);
+    for (const [l, x, y] of [
+      ['W', 0, 0],
+      ['T', s/2, 0],
+      ['B', 0, s/2],
+      ['S', s/2, s/2],
+    ]) {
+      p5.image(letters[l].pg, x, y, s/2, s/2);
+    }
 
     if (!fxpreviewDone) {
       fxpreview();
@@ -80,7 +91,6 @@ new p5((p5) => {
     for (let letter of WTBS) {
       letters[letter].resize(s/2);
     }
-    
     p5.resizeCanvas(s, s);
   }, 50);
 

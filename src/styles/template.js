@@ -10,9 +10,9 @@ import { addLetterStyle, LetterStyle } from '../letterstyle';
 // random-fxhash helpers
 // (see https://www.npmjs.com/package/@thi.ng/random-fxhash)
 import {
-  RND,
-  pick,
-  weighted,
+  // RND,
+  // pick,
+  // weighted,
   probability,
 } from '@thi.ng/random-fxhash';
 
@@ -25,25 +25,19 @@ addLetterStyle(class StyleName extends LetterStyle {
     // All randomness should be initialized here.
     // You can use either P5 this.pg.random(...), or random-fxhash
     // helpers
-
-    // Get letter image (see style-image)
-    this._img = this.letterImage();
-
-    // ...or pixels (see style-pixels)
-    // this._pixels = this.letterPixels();
-    // for (const p of this._pixels) {
-    //   ...
-    // }
+    this._inverted = probability(0.5);
   }
 
   draw() {
     // this.pg = p5.Renderer context
     // this.size = current letter size (1/2 total size)
-    // ...
+    // this.letter = current letter char
+
     this.pg.strokeWeight(0);
-    this.pg.fill(255);
+    this.pg.fill(this._inverted ? 0 : 255);
     this.pg.rect(0, 0, this.size);
-    this.pg.image(this._img, 0, 0, this.size, this.size);
+    this.pg.fill(this._inverted ? 255 : 0);
+    this.drawLetter();
   }
 
 });

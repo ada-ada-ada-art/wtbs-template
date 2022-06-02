@@ -1,25 +1,39 @@
+import { RND } from '@thi.ng/random-fxhash';
+
 export class LetterStyle {
   static author = '';
   static name = '';
   static svgLetters = [];
 
-  constructor(pg, size, letter) {
+  constructor(pg, size, letter, fonts, seed) {
     this.pg = pg;
     this.size = size;
     this.letter = letter;
+    this.fonts = fonts;
+    this.seed = seed;
   }
 
   setup() {}
 
   draw() {}
 
+  drawLetter(fontName = 'dejaVu') {
+    const f = this.fonts[fontName];
+    this.pg.textFont(f.font);
+    this.pg.textSize(this.size * f.sizeFactor);
+    this.pg.textAlign(this.pg.CENTER, this.pg.CENTER);
+    this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
+  }
+
   resize(size) {
     this.size = size;
     this.pg.resizeCanvas(this.size, this.size);
   }
 
-  letterImage() {
-    return LetterStyle.svgLetters[this.letter];
+  reseed() {
+    RND.seed(this.seed);
+    this.pg.randomSeed(this.seed[0]);
+    this.pg.noiseSeed(this.seed[1]);
   }
 
   letterPixels() {
