@@ -1,4 +1,11 @@
-import { RND } from '@thi.ng/random-fxhash';
+import {
+  RND,
+  pick,
+  pickKey,
+  probability,
+  weightedKey,
+} from '@thi.ng/random-fxhash';
+// See https://www.npmjs.com/package/@thi.ng/random-fxhash
 
 export class LetterStyle {
   static author = '';
@@ -11,6 +18,7 @@ export class LetterStyle {
     this.letter = letter;
     this.fonts = fonts;
     this.seed = seed;
+    this.RND = RND;
   }
 
   setup() {}
@@ -31,9 +39,25 @@ export class LetterStyle {
   }
 
   reseed() {
-    RND.seed(this.seed);
+    this.RND.seed(this.seed);
     this.pg.randomSeed(this.seed[0]);
-    this.pg.noiseSeed(this.seed[1]);
+    this.pg.noiseSeed(this.seed[0]);
+  }
+
+  pick(a) {
+    return pick(a);
+  }
+
+  pickKey(o) {
+    return pickKey(o);
+  }
+
+  probability(x) {
+    return probability(x);
+  }
+
+  weightedKey(o) {
+    return weightedKey(o);
   }
 
   letterPixels() {

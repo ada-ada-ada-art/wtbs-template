@@ -1,7 +1,7 @@
 /* global fxhash, fxpreview */
 
 import p5 from 'p5';
-import { pick, seedFromHash } from '@thi.ng/random-fxhash';
+import { RND, pick } from '@thi.ng/random-fxhash';
 import debounce from 'lodash.debounce';
 
 import { styleClasses } from './letterstyle';
@@ -46,7 +46,6 @@ new p5((p5) => {
   };
 
   p5.setup = () => {
-    const seed = seedFromHash(fxhash);
     setupSize();
     p5.noLoop();
     p5.pixelDensity(1);
@@ -54,12 +53,7 @@ new p5((p5) => {
     for (let i = 0; i < 4; i += 1) {
       const letter = WTBS[i];
       const pg = p5.createGraphics(s/2, s/2);
-      const xseed = [
-        seed[(i + 0) % 4],
-        seed[(i + 1) % 4],
-        seed[(i + 2) % 4],
-        seed[(i + 3) % 4]
-      ];
+      const xseed = [RND.int(), RND.int(), RND.int(), RND.int()];
       letters[letter] = new pickedStyle[letter](pg, s/2, letter, fonts, xseed);
       letters[letter].reseed();
       letters[letter].setup();
@@ -69,6 +63,7 @@ new p5((p5) => {
   p5.draw = () => {
     p5.background(0);
     for (let letter of WTBS) {
+      letters[letter].reseed();
       letters[letter].draw();
     }
     for (const [l, x, y] of [

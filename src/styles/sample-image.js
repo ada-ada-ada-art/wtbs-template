@@ -3,10 +3,6 @@
 // Fxhash: https://www.fxhash.xyz/u/Laurent%20Houdard
 
 import { addLetterStyle, LetterStyle } from '../letterstyle';
-import {
-  pick,
-  probability,
-} from '@thi.ng/random-fxhash';
 
 addLetterStyle(class SampleImage extends LetterStyle {
 
@@ -14,8 +10,9 @@ addLetterStyle(class SampleImage extends LetterStyle {
   static name = 'SampleImage';
 
   setup() {
-    this._inverted = probability(0.5);
-    this._gridSize = pick([30, 40, 50, 60]);
+    console.log(this.letter, this.RND.buffer[0]);
+    this._inverted = this.probability(0.5);
+    this._gridSize = this.pick([30, 40, 50, 60]);
     this._grid = [];
     for (let u = 0; u < this._gridSize; u += 1) {
       for (let v = 0; v < this._gridSize; v += 1) {
