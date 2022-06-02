@@ -37,6 +37,20 @@ new p5((p5) => {
     if (s % 2 !== 0) { s -= 1; }
   }
 
+  const restoreDefaults = () => {
+    p5.colorMode(p5.RGB);
+    p5.ellipseMode(p5.CENTER);
+    p5.rectMode(p5.CORNER);
+    p5.blendMode(p5.BLEND);
+    p5.imageMode(p5.CORNER);
+    p5.angleMode(p5.RADIANS);
+    p5.pixelDensity(window.devicePixelRatio);
+    p5.strokeWeight(1);
+    p5.drawingContext.shadowBlur = 0;
+    p5.drawingContext.filter = 'none';
+    p5.noiseDetail(4, 0.5);
+  }
+
   p5.preload = () => {
     fonts.dejaVu = {
       font: p5.loadFont('./fonts/DejaVuSansMono-Bold-subset.ttf'),
@@ -63,8 +77,11 @@ new p5((p5) => {
   p5.draw = () => {
     p5.background(0);
     for (let letter of WTBS) {
+      p5.push();
+      restoreDefaults();
       letters[letter].reseed();
       letters[letter].draw();
+      p5.pop();
     }
     for (const [l, x, y] of [
       ['W', 0, 0],
