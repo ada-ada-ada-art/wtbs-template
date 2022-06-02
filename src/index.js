@@ -62,7 +62,6 @@ new p5((p5) => {
   p5.setup = () => {
     setupSize();
     p5.noLoop();
-    p5.pixelDensity(1);
     p5.createCanvas(s, s);
     for (let i = 0; i < 4; i += 1) {
       const letter = WTBS[i];

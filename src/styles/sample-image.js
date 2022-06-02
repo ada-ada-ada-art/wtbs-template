@@ -34,12 +34,14 @@ addLetterStyle(class SampleImage extends LetterStyle {
     const ds = this.size * this.pg.pixelDensity();
     const len = this.size / this._gridSize;
     for (let {u, v, noise} of this._grid) {
-      const x = Math.round(u / this._gridSize * ds);
-      const y = Math.round(v / this._gridSize * ds);
-      const i = 4 * (x + y * ds);
+      const px = Math.round(u / this._gridSize * ds);
+      const py = Math.round(v / this._gridSize * ds);
+      const i = 4 * (px + py * ds);
       const inside = (this._inverted && this.pg.pixels[i] > 127) ||
                      (!this._inverted && this.pg.pixels[i] <= 127);
-      let p = 255 - this.pg.pixels[i];
+      const p = 255 - this.pg.pixels[i];
+      const x = px / this.pg.pixelDensity();
+      const y = py / this.pg.pixelDensity();
       let a = (noise - 0.5) * Math.PI;
       if (inside) { a /= 3; }
       const x2 = x + 2 * len * Math.cos(a);
