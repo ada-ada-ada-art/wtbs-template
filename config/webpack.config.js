@@ -11,6 +11,20 @@ module.exports = {
     clean: true
   },
   module: {
+    rules: [
+      {
+        test: /\.frag$/i,
+        use: ["raw-loader"],
+      },
+      {
+        test: /\.vert$/i,
+        use: ["raw-loader"],
+      },
+      {
+        test: /\.glsl/i,
+        use: ["raw-loader"],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
