@@ -6,8 +6,9 @@ import debounce from 'lodash.debounce';
 
 import { styleClasses } from './letterstyle';
 
-import './styles/sample-pixels';
-import './styles/sample-image';
+// import './styles/sample-pixels';
+// import './styles/sample-image';
+import './styles/ada-ada-ada';
 
 const pickedStyle = {};
 window.$fxhashFeatures = {};
@@ -15,7 +16,7 @@ window.$fxhashFeatures = {};
 const WTBS = ['W', 'T', 'B', 'S'];
 
 for (let letter of WTBS) {
-  const s = pick(styleClasses);
+  let s = pick(styleClasses);
   pickedStyle[letter] = s;
   window.$fxhashFeatures[letter] = `${s.name} by ${s.author}`;
 }
