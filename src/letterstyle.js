@@ -5,7 +5,7 @@ import {
   probability,
   weightedKey,
 } from '@thi.ng/random-fxhash';
-// See https://www.npmjs.com/package/@thi.ng/random-fxhash
+// See https://docs.thi.ng/umbrella/random-fxhash/
 
 export class LetterStyle {
   static author = '';
@@ -25,12 +25,18 @@ export class LetterStyle {
 
   draw() {}
 
-  drawLetter(fontName = 'dejaVu') {
+  drawLetter(fontName = null, renderer = null) {
+    if (fontName === null) {
+      fontName = Object.keys(this.fonts)[0];
+    }
+    if (renderer === null) {
+      renderer = this.pg;
+    }
     const f = this.fonts[fontName];
-    this.pg.textFont(f.font);
-    this.pg.textSize(this.size * f.sizeFactor);
-    this.pg.textAlign(this.pg.CENTER, this.pg.CENTER);
-    this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
+    renderer.textFont(f.font);
+    renderer.textSize(this.size * f.sizeFactor);
+    renderer.textAlign(this.pg.CENTER, this.pg.CENTER);
+    renderer.text(this.letter, 0, this.size * f.posFactor, this.size);
   }
 
   resize(size) {
