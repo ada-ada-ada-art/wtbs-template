@@ -84,8 +84,6 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
     this.pg.noStroke()
     this.pg.fill('transparent')
     ctx.fillStyle = gradient
-    // this.pg.rect(textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, textBounds.w, textBounds.h)
-    // this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
     this.pg.rect(0, 0, this.pg.width, this.pg.height)
   }
 
@@ -106,10 +104,8 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
     gradient.addColorStop(1, this.pg.color(this.pg.random(0, 360), 90, 50))
     
     this.pg.noStroke()
-    // this.pg.fill(0, 0, 30)
     this.pg.fill('transparent')
     ctx.fillStyle = gradient
-    // this.pg.rect(textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, textBounds.w, textBounds.h)
     this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
   }
 

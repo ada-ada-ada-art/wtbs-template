@@ -6,9 +6,10 @@ import debounce from 'lodash.debounce';
 
 import { styleClasses } from './letterstyle';
 
-// import './styles/sample-pixels';
-// import './styles/sample-image';
+import './styles/sample-pixels';
+import './styles/sample-image';
 import './styles/ada-ada-ada';
+// import './styles/ada-ada-ada_noise';
 
 const pickedStyle = {};
 window.$fxhashFeatures = {};
