@@ -28,19 +28,20 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
     // this.pg.fill(this._inverted ? 0 : 255);
     this.pg.rect(0, 0, this.size);
     // this.pg.fill(this._inverted ? 255 : 0);
-    this.drawLetter();
+    this.drawBackground()
     console.count('drawletter')
-    const noiseLevel = 5
-    // // noiseLevel = 0
-    const scratchCount = this.pg.random(3, 9)
-    // // scratchCount = 0
-    const spotCount = this.pg.random(5, 10)
+    const noiseLevel = 2
+    // const scratchCount = this.pg.random(3, 9)
+    const scratchCount = 0
+    // const spotCount = this.pg.random(5, 10)
+    const spotCount = 0
 
     this.pg.blendMode(this.pg.OVERLAY)
     this.drawFilmGradients()
     this.pg.blendMode(this.pg.BLEND)
+    this.drawLetter()
 
-    this.hasDrawnNoise = true
+    this.hasDrawnNoise = false
     if(!this.hasDrawnNoise){
         for(let i = 0; i < scratchCount; i++) {
             const placement = this.pg.createVector(this.pg.random(this.pg.width * .1, this.pg.width * .9), this.pg.random(this.pg.height * .1, this.pg.height * .9))
@@ -68,46 +69,48 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
     }
   }
 
+  drawBackground() {
+    const ctx = this.pg.drawingContext
+    const gradient = ctx.createLinearGradient(
+        0, 0,
+        this.pg.width * 2, 0
+    )
+
+    gradient.addColorStop(0, this.pg.color(this.pg.random(0, 360), 90, 50))
+    gradient.addColorStop(.33, this.pg.color(this.pg.random(0, 360), 90, 50))
+    gradient.addColorStop(.66, this.pg.color(this.pg.random(0, 360), 90, 50))
+    gradient.addColorStop(1, this.pg.color(this.pg.random(0, 360), 90, 50))
+    
+    this.pg.noStroke()
+    this.pg.fill('transparent')
+    ctx.fillStyle = gradient
+    // this.pg.rect(textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, textBounds.w, textBounds.h)
+    // this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
+    this.pg.rect(0, 0, this.pg.width, this.pg.height)
+  }
+
   drawLetter(fontName = 'dejaVu') {
     const f = this.fonts[fontName];
     this.pg.textFont(f.font);
     this.pg.textSize(this.size * f.sizeFactor);
     this.pg.textAlign(this.pg.CENTER, this.pg.CENTER);
     let textBounds = f.font.textBounds(this.letter, 0, this.size * f.posFactor, this.size)
-    let textPoints = f.font.textToPoints(this.letter, 0, this.size * f.posFactor, this.size * f.sizeFactor)
-    console.log(textPoints)
-    console.log(textBounds)
-    // this.pg.stroke(255, 0, 0);
-    // this.pg.strokeWeight(5)
     const ctx = this.pg.drawingContext
     const gradient = ctx.createLinearGradient(
-        textBounds.x, textBounds.y,
-        textBounds.x + textBounds.w * 2, textBounds.y
-    )
-
-    gradient.addColorStop(0, this.pg.color(this.pg.random(330, 360 + 60) % 360, 90, 20))
-    gradient.addColorStop(.25, this.pg.color(this.pg.random(330, 360 + 60) % 360, 90, 20))
-    gradient.addColorStop(.75, this.pg.color(this.pg.random(330, 360 + 60) % 360, 90, 20))
-    gradient.addColorStop(1, this.pg.color(this.pg.random(330, 360 + 60) % 360, 90, 20))
-    // this.pg.noFill()
-    this.pg.beginShape()
-    let edges = this.pg.random(10, 100)
-    for(let i = 0; i < textPoints.length; i += Math.round(textPoints.length / edges)) {
-        this.pg.curveVertex(textPoints[i].x, this.size * f.posFactor + textPoints[i].y)
-        if(i === textPoints.length - (textPoints.length / edges)) {
-            this.pg.curveVertex(textPoints[0].x, this.size * f.posFactor + textPoints[0].y)
-        }
-        let satVal = this.pg.map(i, 0, textPoints.length, 0, 100)
-        this.pg.strokeWeight(10)
-        this.pg.stroke(0, satVal, 50)
-        this.pg.point(textPoints[i].x, this.size * f.posFactor + textPoints[i].y)
-    }
+              textBounds.x, textBounds.y,
+              textBounds.x + textBounds.w * 2, textBounds.y
+           )
+           gradient.addColorStop(0, this.pg.color(this.pg.random(0, 360), 90, 50))
+    gradient.addColorStop(.33, this.pg.color(this.pg.random(0, 360), 90, 50))
+    gradient.addColorStop(.66, this.pg.color(this.pg.random(0, 360), 90, 50))
+    gradient.addColorStop(1, this.pg.color(this.pg.random(0, 360), 90, 50))
+    
     this.pg.noStroke()
+    // this.pg.fill(0, 0, 30)
     this.pg.fill('transparent')
     ctx.fillStyle = gradient
-    this.pg.endShape(this.pg.CLOSE)
     // this.pg.rect(textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, textBounds.w, textBounds.h)
-    // this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
+    this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
   }
 
   drawFilmGradients() {
@@ -122,7 +125,7 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
       const stops = this.pg.random(10)
       for(let stop = 0; stop < stops; stop++) {
         const stopVal = this.pg.map(stop, 0, stops, 0, 1, true)
-        gradient.addColorStop(stopVal, this.pg.color(0, 0, this.pg.random(40, 70), this.pg.random(1, 5)))
+        gradient.addColorStop(stopVal, this.pg.color(0, 10, this.pg.random(40, 75), this.pg.random(1, 5)))
       }
       this.pg.fill('transparent')
       ctx.fillStyle = gradient
