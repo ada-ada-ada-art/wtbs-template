@@ -13,8 +13,12 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
   static name = 'AdaAdaAda';
   isDebugging = true
 
+  coreHue = 100
+
   setup() {
     this._inverted = this.probability(0.5);
+
+    this.coreHue = this.pg.random(0, 360)
   }
 
   draw() {
@@ -22,19 +26,12 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
     // this.size = current letter size (1/2 total size)
     // this.letter = current letter char
 
-    this.pg.strokeWeight(0);
+    this.pg.strokeWeight(0)
     this.pg.colorMode(this.pg.HSL, 360, 100, 100)
-    this.pg.fill(52, 5, 80)
-    // this.pg.fill(this._inverted ? 0 : 255);
-    this.pg.rect(0, 0, this.size);
-    // this.pg.fill(this._inverted ? 255 : 0);
+    this.pg.fill(52, 0, 80)
+    this.pg.rect(0, 0, this.size)
     this.drawBackground()
-    console.count('drawletter')
     const noiseLevel = 2
-    // const scratchCount = this.pg.random(3, 9)
-    const scratchCount = 0
-    // const spotCount = this.pg.random(5, 10)
-    const spotCount = 0
 
     this.pg.blendMode(this.pg.OVERLAY)
     this.drawFilmGradients()
@@ -43,25 +40,6 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
 
     this.hasDrawnNoise = false
     if(!this.hasDrawnNoise){
-        for(let i = 0; i < scratchCount; i++) {
-            const placement = this.pg.createVector(this.pg.random(this.pg.width * .1, this.pg.width * .9), this.pg.random(this.pg.height * .1, this.pg.height * .9))
-            const gfx = this.drawScratch(placement)
-            // Draw the graphic with some random alpha level
-            this.pg.tint(0, 0, 100, this.pg.random(90, 100))
-            // p5.Graphics have a weird black border around shapes, so we get rid of them with this.pg.LIGHTEST blend
-            this.pg.blendMode(this.pg.OVERLAY)
-            this.pg.image(gfx, placement.x, placement.y)
-        }
-
-        for(let i = 0; i < spotCount; i++) {
-            const placement = this.pg.createVector(this.pg.random(this.pg.width * .1, this.pg.width * .9), this.pg.random(this.pg.height * .1, this.pg.height * .9))
-            const gfx = this.drawSpot(placement)
-            // Draw the graphic with some random alpha level
-            this.pg.tint(0, 0, 100, this.pg.random(90, 100))
-            // p5.Graphics have a weird black border around shapes, so we get rid of them with this.pg.LIGHTEST blend
-            this.pg.blendMode(this.pg.LIGHTEST)
-            this.pg.image(gfx, placement.x, placement.y)
-        }
         for(let i = 0; i < noiseLevel; i++) {
             this.drawNoise()
         }
@@ -71,15 +49,21 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
 
   drawBackground() {
     const ctx = this.pg.drawingContext
-    const gradient = ctx.createLinearGradient(
-        0, 0,
-        this.pg.width * 2, 0
+    // const gradient = ctx.createLinearGradient(
+    //     0, 0,
+    //     this.pg.width * 2, 0
+    // )
+    let centerX = this.pg.width / 2
+    let centerY = this.pg.height / 2
+    const gradient = ctx.createRadialGradient(
+      centerX, centerY, this.pg.width * 0.01,
+      centerX, centerY, this.pg.width * 2
     )
 
-    gradient.addColorStop(0, this.pg.color(this.pg.random(0, 360), 90, 50))
-    gradient.addColorStop(.33, this.pg.color(this.pg.random(0, 360), 90, 50))
-    gradient.addColorStop(.66, this.pg.color(this.pg.random(0, 360), 90, 50))
-    gradient.addColorStop(1, this.pg.color(this.pg.random(0, 360), 90, 50))
+    gradient.addColorStop(0, this.pg.color(this.coreHue + this.pg.random(-60, 60) % 360, 90, 50))
+    gradient.addColorStop(.33, this.pg.color(this.coreHue + this.pg.random(-60, 60) % 360, 90, 50))
+    gradient.addColorStop(.66, this.pg.color(this.coreHue + this.pg.random(-60, 60) % 360, 90, 50))
+    gradient.addColorStop(1, this.pg.color(this.coreHue + this.pg.random(-60, 60) % 360, 90, 50))
     
     this.pg.noStroke()
     this.pg.fill('transparent')
@@ -94,18 +78,36 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
     this.pg.textAlign(this.pg.CENTER, this.pg.CENTER);
     let textBounds = f.font.textBounds(this.letter, 0, this.size * f.posFactor, this.size)
     const ctx = this.pg.drawingContext
+    let isBlackWhite = false
     const gradient = ctx.createLinearGradient(
-              textBounds.x, textBounds.y,
-              textBounds.x + textBounds.w * 2, textBounds.y
-           )
-           gradient.addColorStop(0, this.pg.color(this.pg.random(0, 360), 90, 50))
-    gradient.addColorStop(.33, this.pg.color(this.pg.random(0, 360), 90, 50))
-    gradient.addColorStop(.66, this.pg.color(this.pg.random(0, 360), 90, 50))
-    gradient.addColorStop(1, this.pg.color(this.pg.random(0, 360), 90, 50))
+      textBounds.x, textBounds.y,
+      textBounds.x + textBounds.w * 2, textBounds.y
+    )
+    if (isBlackWhite) {
+      gradient.addColorStop(0, this.pg.color(0, 0, this.pg.random(0,100)))
+      gradient.addColorStop(.33, this.pg.color(0, 0, this.pg.random(0,100)))
+      gradient.addColorStop(.66, this.pg.color(0, 0, this.pg.random(0,100)))
+      gradient.addColorStop(1, this.pg.color(0, 0, this.pg.random(0,100)))
+    } else {
+      gradient.addColorStop(0, this.pg.color(this.coreHue + this.pg.random(-60, 60) % 360, 90, 50))
+      gradient.addColorStop(.33, this.pg.color(this.coreHue + this.pg.random(-60, 60) % 360, 90, 50))
+      gradient.addColorStop(.66, this.pg.color(this.coreHue + this.pg.random(-60, 60) % 360, 90, 50))
+      gradient.addColorStop(1, this.pg.color(this.coreHue + this.pg.random(-60, 60) % 360, 90, 50))
+    }
     
     this.pg.noStroke()
+    this.pg.strokeWeight(3)
+    ctx.shadowColor = this.pg.color(0, 0, 70,1)
+    ctx.shadowOffsetX = 0
+    ctx.shadowOffsetY = 0
+    ctx.shadowBlur = 250
     this.pg.fill('transparent')
+    // ctx.fillStyle = gradient
+    this.pg.blendMode(this.pg.DARKEST)
+    this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
     ctx.fillStyle = gradient
+    this.pg.blendMode(this.pg.BLEND)
+    ctx.shadowColor = 'transparent'
     this.pg.text(this.letter, 0, this.size * f.posFactor, this.size);
   }
 
@@ -121,7 +123,7 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
       const stops = this.pg.random(10)
       for(let stop = 0; stop < stops; stop++) {
         const stopVal = this.pg.map(stop, 0, stops, 0, 1, true)
-        gradient.addColorStop(stopVal, this.pg.color(0, 10, this.pg.random(40, 75), this.pg.random(1, 5)))
+        gradient.addColorStop(stopVal, this.pg.color(0, 0, this.pg.random(40, 75), this.pg.random(1, 5)))
       }
       this.pg.fill('transparent')
       ctx.fillStyle = gradient
@@ -130,9 +132,7 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
   }
 
   drawScratch(placement) {
-    console.log('place', placement)
     const gfx = this.createGraphics(this.pg.width * .2, this.pg.height * .2)
-    console.log('place', placement)
     const scratchLength = this.pg.random(5, 10)
     if (this.isDebugging) {
       this.pg.noFill()
@@ -182,7 +182,6 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
   }
 
   drawNoise() {
-    console.count('drawNoise')
     // Add noise
     // SRC: Hashed City Blocks by Yazid
     this.pg.loadPixels()
