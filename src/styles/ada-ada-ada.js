@@ -1,20 +1,22 @@
 // Ada Ada Ada
 // Twitter: @ada_ada_ada_art
-// Fxhash: https://www.fxhash.xyz/u/<fxhash>
-
+// Fxhash: https://www.fxhash.xyz/u/Ada%20Ada%20Ada
 import { addLetterStyle, LetterStyle } from '../letterstyle';
 
 // To make a new style, copy this template in a new file and import it
 // at the begining of ../index.js
 
-addLetterStyle(class AdaAdaAda extends LetterStyle {
+addLetterStyle(class Spectrum extends LetterStyle {
 
   static author = 'Ada Ada Ada';
-  static name = 'AdaAdaAda';
+  static name = 'Spectrum';
   isDebugging = true
+  episodeCount = 25
+  direction = 0
 
   setup() {
     this._inverted = this.probability(0.5);
+    this.direction = this.pg.random(-1, 1)
   }
 
   draw() {
@@ -32,9 +34,8 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
     this.pg.blendMode(this.pg.OVERLAY)
     this.drawFilmGradients()
 
-    let episodeCount = 25
-    for(let i = 0; i < episodeCount; i++) {
-      this.drawLetter('dejaVu', this.pg.DIFFERENCE)
+    for(let i = 0; i < this.episodeCount; i++) {
+      this.drawLetter('dejaVu', this.pg.DIFFERENCE, 1 + i)
     }
     this.drawLetter('dejaVu', this.pg.BLEND, 0)
     this.pg.blendMode(this.pg.OVERLAY)
@@ -70,32 +71,49 @@ addLetterStyle(class AdaAdaAda extends LetterStyle {
     this.pg.rect(0, 0, this.pg.width, this.pg.height)
   }
 
-  drawLetter(fontName = 'dejaVu', blendMode = this.pg.BLEND, randomOffset = this.size * .1) {
+  drawLetter(fontName = 'dejaVu', blendMode = this.pg.BLEND, offset = 0) {
     const f = this.fonts[fontName];
+    offset *= this.direction
+    let sizeMultiplier = this.pg.map(offset, 0, this.episodeCount * this.direction, 1, 0)
+    this.pg.textAlign(this.pg.CENTER)
     this.pg.textFont(f.font);
-    this.pg.textSize(this.size * f.sizeFactor);
+    this.pg.textSize(this.size * f.sizeFactor * sizeMultiplier);
     this.pg.textAlign(this.pg.CENTER, this.pg.CENTER);
     let letterPos = this.pg.createVector(
-      this.pg.random(-randomOffset, randomOffset),
-      (this.size * f.posFactor) + this.pg.random(-randomOffset, randomOffset)
+      offset,
+      (this.size * f.posFactor * sizeMultiplier)
     )
-    let textBounds = f.font.textBounds(this.letter, letterPos.x, letterPos.y, this.size)
+    // letterPos = letterPos.add(this.direction)
+    let textBounds = f.font.textBounds(this.letter, letterPos.x, letterPos.y, this.size * sizeMultiplier)
     const ctx = this.pg.drawingContext
-    const radialGradient = ctx.createRadialGradient(
+    let radialGradient = ctx.createRadialGradient(
       textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, 0.1,
       textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, textBounds.w * 2,
     )
+    if (this.pg.random() > 0.5) {
+      radialGradient = ctx.createLinearGradient(
+        textBounds.x, textBounds.y,
+        textBounds.x + textBounds.w * 2, textBounds.y + textBounds.h * 2
+      )
+    }
     
     radialGradient.addColorStop(0, this.pg.color(this.pg.random(0,360), 90, 50))
     radialGradient.addColorStop(.33, this.pg.color(this.pg.random(0,360), 90, 50))
     radialGradient.addColorStop(.66, this.pg.color(this.pg.random(0,360), 90, 50))
     radialGradient.addColorStop(1, this.pg.color(this.pg.random(0,360), 90, 50))
     
-    this.pg.noStroke()
-    this.pg.fill('transparent')
-    ctx.fillStyle = radialGradient
+    if (offset === 0) {
+      this.pg.noStroke()
+      this.pg.fill('transparent')
+      ctx.fillStyle = radialGradient
+    } else {
+      this.pg.noFill()
+      this.pg.stroke('transparent')
+      this.pg.strokeWeight(this.pg.map(offset, 0, this.episodeCount * this.direction, 1, 5000, true))
+      ctx.strokeStyle = radialGradient
+    }
     this.pg.blendMode(blendMode)
-    this.pg.text(this.letter, letterPos.x, letterPos.y, this.size);
+    this.pg.text(this.letter, letterPos.x, letterPos.y, this.size * sizeMultiplier)
   }
 
   drawFilmGradients() {
