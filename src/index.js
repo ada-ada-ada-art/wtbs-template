@@ -16,7 +16,7 @@ window.$fxhashFeatures = {};
 const WTBS = ['W', 'T', 'B', 'S'];
 
 for (let letter of WTBS) {
-  let s = pick(styleClasses);
+  const s = pick(styleClasses);
   pickedStyle[letter] = s;
   window.$fxhashFeatures[letter] = `${s.name} by ${s.author}`;
 }
