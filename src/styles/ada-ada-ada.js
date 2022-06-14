@@ -13,10 +13,12 @@ addLetterStyle(class Spectrum extends LetterStyle {
   isDebugging = true
   episodeCount = 25
   direction = 0
+  maxStroke = 5000
 
   setup() {
     this._inverted = this.probability(0.5);
-    this.direction = this.pg.random(-1, 1)
+    this.direction = this.pg.random(-10, 10)
+    this.maxStroke = this.pg.random(2500, 10000)
   }
 
   draw() {
@@ -109,7 +111,7 @@ addLetterStyle(class Spectrum extends LetterStyle {
     } else {
       this.pg.noFill()
       this.pg.stroke('transparent')
-      this.pg.strokeWeight(this.pg.map(offset, 0, this.episodeCount * this.direction, 1, 5000, true))
+      this.pg.strokeWeight(this.pg.map(offset, 0, this.episodeCount * this.direction, 1, this.maxStroke, true))
       ctx.strokeStyle = radialGradient
     }
     this.pg.blendMode(blendMode)
