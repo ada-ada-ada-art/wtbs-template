@@ -14,11 +14,13 @@ addLetterStyle(class Spectrum extends LetterStyle {
   episodeCount = 25
   direction = 0
   maxStroke = 5000
+  unit = 1
 
   setup() {
+    this.unit = this.size / 800
     this._inverted = this.probability(0.5);
-    this.direction = this.pg.random(-10, 10)
-    this.maxStroke = this.pg.random(2500, 10000)
+    this.direction = this.pg.random(-10 * this.unit, 10 * this.unit)
+    this.maxStroke = this.pg.random(2500 * this.unit, 10000 * this.unit)
   }
 
   draw() {
@@ -89,7 +91,7 @@ addLetterStyle(class Spectrum extends LetterStyle {
     let textBounds = f.font.textBounds(this.letter, letterPos.x, letterPos.y, this.size * sizeMultiplier)
     const ctx = this.pg.drawingContext
     let radialGradient = ctx.createRadialGradient(
-      textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, 0.1,
+      textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, textBounds.w * 0.1,
       textBounds.x + textBounds.w * .5, textBounds.y + textBounds.h * .5, textBounds.w * 2,
     )
     if (this.pg.random() > 0.5) {
